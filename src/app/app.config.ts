@@ -5,7 +5,9 @@ import { provideClientHydration , withEventReplay } from '@angular/platform-brow
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeng/themes/aura';
-import { provideHttpClient , withFetch } from '@angular/common/http';
+import { provideHttpClient , withFetch , withInterceptors } from '@angular/common/http';
+import { headerInterceptor } from './core/interceptors/header/header.interceptor';
+import { errorInterceptor } from './core/interceptors/error/error.interceptor';
 
 export const appConfig : ApplicationConfig = {
   providers : [
@@ -28,6 +30,6 @@ export const appConfig : ApplicationConfig = {
         }
       }
     } ) ,
-    provideHttpClient ( withFetch () )
+    provideHttpClient ( withFetch () , withInterceptors ( [ headerInterceptor , errorInterceptor ] ) )
   ]
 };
