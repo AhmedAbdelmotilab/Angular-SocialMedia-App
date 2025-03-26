@@ -8,6 +8,7 @@ import Aura from '@primeng/themes/aura';
 import { provideHttpClient , withFetch , withInterceptors } from '@angular/common/http';
 import { headerInterceptor } from './core/interceptors/header/header.interceptor';
 import { errorInterceptor } from './core/interceptors/error/error.interceptor';
+import { MessageService } from 'primeng/api';
 
 export const appConfig : ApplicationConfig = {
   providers : [
@@ -30,6 +31,7 @@ export const appConfig : ApplicationConfig = {
         }
       }
     } ) ,
-    provideHttpClient ( withFetch () , withInterceptors ( [ headerInterceptor , errorInterceptor ] ) )
+    provideHttpClient ( withFetch () , withInterceptors ( [ headerInterceptor , errorInterceptor ] ) ) ,
+    MessageService
   ]
 };
