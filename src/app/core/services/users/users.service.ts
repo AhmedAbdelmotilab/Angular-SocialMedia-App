@@ -2,11 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { jwtDecode } from 'jwt-decode';
 
 @Injectable ( {
   providedIn : 'root'
 } )
 export class UsersService {
+  userData : any = null;
 
   constructor ( private httpClient : HttpClient ) { }
 
@@ -30,4 +32,10 @@ export class UsersService {
     return this.httpClient.put ( environment.baseUrl + 'users/upload-photo' , photo );
   }
 
+  saveUserData () : void {
+    if ( localStorage.getItem ( 'token' ) ) {
+      this.userData = jwtDecode ( localStorage.getItem ( 'token' )! );
+      console.log ( this.userData );
+    }
+  }
 }
