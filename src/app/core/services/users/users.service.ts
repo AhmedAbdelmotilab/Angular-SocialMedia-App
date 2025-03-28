@@ -28,8 +28,10 @@ export class UsersService {
     return this.httpClient.get ( environment.baseUrl + 'users/profile-data' );
   }
 
-  uploadProfilePhoto ( photo : any ) : Observable<any> {
-    return this.httpClient.put ( environment.baseUrl + 'users/upload-photo' , photo );
+  uploadProfilePhoto ( image : File ) : Observable<any> {
+    const formData = new FormData ();
+    formData.append ( 'photo' , image ); // Key is always 'photo'
+    return this.httpClient.put ( environment.baseUrl + 'users/upload-photo' , formData );
   }
 
   saveUserData () : void {
