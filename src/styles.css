@@ -1,4 +1,8 @@
 @import "tailwindcss";
 @import "primeicons/primeicons.css";
+
 @plugin "flowbite/plugin";
 @source "../node_modules/flowbite";
+.p-fileupload-file-actions {
+  display : none !important;
+}
