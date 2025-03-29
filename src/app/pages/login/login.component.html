@@ -1,92 +1,96 @@
 <section>
-  <div class = "container min-h-screen flex items-center justify-center p-4">
-    <div class = "rounded-lg shadow-lg overflow-hidden w-full max-w-lg ">
-      <div class = "bg-blue-600 dark:bg-blue-800 py-4 px-6">
-        <h2 class = "text-white text-center text-2xl font-bold">Login Into Your Account</h2>
-        <p class = "text-blue-100 text-center dark:text-blue-200">Welcome today!</p>
+  <div class="container min-h-screen flex items-center justify-center p-4">
+    <div class="rounded-lg shadow-lg overflow-hidden w-full max-w-lg">
+      <div class="bg-blue-600 dark:bg-blue-800 py-4 px-6">
+        <h2 class="text-white text-center text-2xl font-bold">
+          Login Into Your Account
+        </h2>
+        <p class="text-blue-100 text-center dark:text-blue-200">
+          Welcome today!
+        </p>
       </div>
       <!-- Must Add It For Making The Toaster Works  -->
       <p-toast />
       <form
-        [formGroup] = "loginForm"
-        (ngSubmit) = "submitForm()"
-        class = "p-6 space-y-4"
+        [formGroup]="loginForm"
+        (ngSubmit)="submitForm()"
+        class="p-6 space-y-4"
       >
-
         <!-- Email Field -->
-        <div class = "field">
-          <label
-            for = "email"
-            class = "block text-sm font-medium mb-1"
-          >Email Address</label>
+        <div class="field">
+          <label for="email" class="block text-sm font-medium mb-1"
+            >Email Address</label
+          >
           <input
             pInputText
-            formControlName = "email"
-            id = "email"
-            placeholder = "your.email@example.com"
-            [style] = "{'width': '100%'}"
-          >
+            formControlName="email"
+            id="email"
+            placeholder="your.email@example.com"
+            [style]="{ width: '100%' }"
+          />
           <!-- Errors MSG Alert -->
-          @let emailControl = loginForm.get('email');
-          @if (emailControl?.touched && emailControl?.errors) {
-            <div class = "pt-3">
-              @if (emailControl?.getError('required')) {
-                <p-message severity = "error">Is not allowed to be empty</p-message>
-              }
-              @if (emailControl?.getError('email')) {
-                <p-message severity = "error">Must be a valid email format</p-message>
-              }
-            </div>
+          @let emailControl = loginForm.get('email'); @if (emailControl?.touched
+          && emailControl?.errors) {
+          <div class="pt-3">
+            @if (emailControl?.getError('required')) {
+            <p-message severity="error">Is not allowed to be empty</p-message>
+            } @if (emailControl?.getError('email')) {
+            <p-message severity="error">Must be a valid email format</p-message>
+            }
+          </div>
           }
         </div>
 
         <!-- Password Field -->
-        <div class = "field">
-          <label
-            for = "password"
-            class = "block text-sm font-medium mb-1"
-          >Password</label>
+        <div class="field">
+          <label for="password" class="block text-sm font-medium mb-1"
+            >Password</label
+          >
           <p-password
-            formControlName = "password"
-            id = "password"
-            [style] = "{'width': '100%'}"
-            [toggleMask] = "true"
-            placeholder = "Enter Your Password"
-            inputStyleClass = "w-full"
-            [feedback] = "false"
+            formControlName="password"
+            id="password"
+            [style]="{ width: '100%' }"
+            [toggleMask]="true"
+            placeholder="Enter Your Password"
+            inputStyleClass="w-full"
+            [feedback]="false"
           ></p-password>
           <!-- Errors MSG Alert -->
-          @let passwordControl = loginForm.get('password');
-          @if (passwordControl?.touched && passwordControl?.errors) {
-            <div class = "pt-3">
-              @if (passwordControl?.getError('required')) {
-                <p-message severity = "error">Is not allowed to be empty</p-message>
-              }
-              @if (passwordControl?.getError('pattern')) {
-                <p-message severity = "error">Must contain at least 8 characters</p-message>
-                <p-message severity = "error">Must include at least one uppercase letter, one lowercase letter, one digit, and one special character.</p-message>
-              }
-            </div>
+          @let passwordControl = loginForm.get('password'); @if
+          (passwordControl?.touched && passwordControl?.errors) {
+          <div class="pt-3">
+            @if (passwordControl?.getError('required')) {
+            <p-message severity="error">Is not allowed to be empty</p-message>
+            } @if (passwordControl?.getError('pattern')) {
+            <p-message severity="error"
+              >Must contain at least 8 characters</p-message
+            >
+            <p-message severity="error"
+              >Must include at least one uppercase letter, one lowercase letter,
+              one digit, and one special character.</p-message
+            >
+            }
+          </div>
           }
         </div>
 
         <!-- Submit Button -->
-        <div class = "pt-2">
+        <div class="pt-2">
           <p-button
-            type = "submit"
-            label = "Login"
-            [disabled] = "loginForm.invalid"
-            styleClass = "w-full p-button-raised"
+            type="submit"
+            label="Login"
+            [disabled]="loginForm.invalid"
+            styleClass="w-full p-button-raised"
           ></p-button>
         </div>
       </form>
 
-      <div class = "px-6 py-4 text-center">
-        <p class = "text-sm ">
+      <div class="px-6 py-4 text-center">
+        <p class="text-sm">
           Not having an account?
           <a
-            routerLink = "/register"
-            class = "font-medium text-blue-600 hover:text-blue-500"
+            routerLink="/register"
+            class="font-medium text-blue-600 hover:text-blue-500"
           >
             Register Now
           </a>

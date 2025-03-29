@@ -10,12 +10,12 @@ export class PostsService {
 
   constructor ( private httpClient : HttpClient ) { }
 
-  createPost ( data : any ) : Observable<any> {
-    return this.httpClient.post ( environment.baseUrl + 'posts' , data );
+  createPost ( postData : FormData ) : Observable<any> {
+    return this.httpClient.post ( environment.baseUrl + 'posts' , postData );
   }
 
-  getAllPosts () : Observable<any> {
-    return this.httpClient.get ( environment.baseUrl + 'posts' );
+  getAllPosts ( page : number = 1 ) : Observable<any> {
+    return this.httpClient.get ( environment.baseUrl + `posts?page=${ page }&limit=5` );
   }
 
   getMyPosts () : Observable<any> {
@@ -30,7 +30,7 @@ export class PostsService {
     return this.httpClient.put ( environment.baseUrl + `posts/${ postId }` , data );
   }
 
-  deletePost ( data : any , postId : any ) : Observable<any> {
+  deletePost ( postId : any ) : Observable<any> {
     return this.httpClient.delete ( environment.baseUrl + `posts/${ postId }` );
   }
 }

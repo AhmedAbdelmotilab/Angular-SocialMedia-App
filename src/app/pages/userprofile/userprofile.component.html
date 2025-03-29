@@ -1,156 +1,219 @@
-<section class = "flex justify-center items-center min-h-screen w-full p-4">
-  <p-toast position = "top-right"></p-toast>
+@if (user._id) {
+  <section class = "flex justify-center items-center min-h-screen w-full p-4">
+    <p-toast position = "top-right"></p-toast>
 
-  <!-- Main Card Container -->
-  <div class = "w-full max-w-4xl">
-    <p-card
-      [style] = "{ 'width': '100%' }"
-      styleClass = "shadow-5"
+    <!-- Main Card Container -->
+    <div class = "w-full max-w-4xl">
+      <p-card
+        [style] = "{ 'width': '100%' }"
+        styleClass = "shadow-5"
+      >
+        <!-- Header with Profile Image -->
+        <ng-template pTemplate = "header">
+          <div class = "flex justify-center bg-gray-100 p-4">
+            <p-image
+              [src] = "user.photo"
+              alt = "Profile photo of {{ user.name }}"
+              width = "300"
+              height = "300"
+              [preview] = "true"
+              imageClass = "border-circle shadow-3"
+              [imageStyle] = "{ 'object-fit': 'cover' }"
+            />
+          </div>
+        </ng-template>
+
+        <!-- Title Section -->
+        <ng-template pTemplate = "title">
+          <div class = "flex align-items-center gap-3">
+            <i class = "pi pi-user text-3xl pt-2"></i>
+            <span class = "text-2xl font-bold">{{ user.name }}</span>
+          </div>
+        </ng-template>
+
+        <!-- Subtitle Section -->
+        <ng-template pTemplate = "subtitle">
+          <div class = "flex align-items-center gap-3">
+            <i class = "pi pi-envelope text-3xl pt-2"></i>
+            <a
+              href = "mailto:{{ user.email }}"
+              class = "text-primary no-underline hover:underline text-xl"
+            >
+              {{ user.email }}
+            </a>
+          </div>
+        </ng-template>
+
+        <!-- Content Grid -->
+        <div class = "grid">
+          <div class = "col-12 md:col-6 p-4 border-bottom-1 surface-border">
+            <div class = "text-600 font-medium text-lg">ID</div>
+            <div class = "text-900 text-lg">{{ user._id }}</div>
+          </div>
+          <div class = "col-12 md:col-6 p-4 border-bottom-1 surface-border">
+            <div class = "text-600 font-medium text-lg">Date of Birth</div>
+            <div class = "text-900 text-lg">{{ user.dateOfBirth | date:'mediumDate' }}</div>
+          </div>
+          <div class = "col-12 md:col-6 p-4 border-bottom-1 surface-border">
+            <div class = "text-600 font-medium text-lg">Gender</div>
+            <div class = "text-900 text-lg">{{ user.gender | titlecase }}</div>
+          </div>
+          <div class = "col-12 md:col-6 p-4 border-bottom-1 surface-border">
+            <div class = "text-600 font-medium text-lg">Last Password Change</div>
+            <div class = "text-900 text-lg">{{ user.passwordChangedAt | date:'medium' }}</div>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <ng-template pTemplate = "footer">
+          <div class = "flex justify-center">
+            <p-button
+              label = "Change Your Image"
+              icon = "pi pi-pencil"
+              styleClass = "p-button-outlined w-full p-button-lg"
+              (onClick) = "displayImageChangeDialog = true"
+            />
+          </div>
+        </ng-template>
+      </p-card>
+    </div>
+
+    <!-- Dialog -->
+    <p-dialog
+      header = "Update Profile Picture"
+      [(visible)] = "displayImageChangeDialog"
+      [style] = "{ width: 'min(90vw, 40rem)' }"
+      [modal] = "true"
+      [draggable] = "false"
+      [resizable] = "false"
+      styleClass = "modern-upload-dialog"
     >
-      <!-- Header with Profile Image -->
-      <ng-template pTemplate = "header">
-        <div class = "flex justify-center bg-gray-100 p-4">
-          <p-image
-            [src] = "user.photo"
-            alt = "Profile photo of {{ user.name }}"
-            width = "300"
-            height = "300"
-            [preview] = "true"
-            imageClass = "border-circle shadow-3"
-            [imageStyle] = "{ 'object-fit': 'cover' }"
-          />
-        </div>
-      </ng-template>
+      <div class = "flex flex-col gap-6">
+        <!-- Progress Bar -->
+        <p-progressBar
+          *ngIf = "uploading"
+          [value] = "uploadProgress"
+          [showValue] = "true"
+          styleClass = "h-2"
+        ></p-progressBar>
 
-      <!-- Title Section -->
-      <ng-template pTemplate = "title">
-        <div class = "flex align-items-center gap-3">
-          <i class = "pi pi-user text-3xl pt-2"></i>
-          <span class = "text-2xl font-bold">{{ user.name }}</span>
-        </div>
-      </ng-template>
-
-      <!-- Subtitle Section -->
-      <ng-template pTemplate = "subtitle">
-        <div class = "flex align-items-center gap-3">
-          <i class = "pi pi-envelope text-3xl pt-2"></i>
-          <a
-            href = "mailto:{{ user.email }}"
-            class = "text-primary no-underline hover:underline text-xl"
+        <!-- Upload Section -->
+        <div class = "card p-0">
+          <p-fileUpload
+            name = "profileImage"
+            accept = "image/*"
+            [multiple] = "false"
+            [maxFileSize] = "4000000"
+            (onSelect) = "onImageSelect($event)"
+            (onClear) = "resetImageSelection()"
+            [customUpload] = "true"
+            chooseLabel = "Browse"
+            uploadLabel = "Upload"
+            cancelLabel = "Cancel"
+            #fileUpload
           >
-            {{ user.email }}
-          </a>
-        </div>
-      </ng-template>
-
-      <!-- Content Grid -->
-      <div class = "grid">
-        <div class = "col-12 md:col-6 p-4 border-bottom-1 surface-border">
-          <div class = "text-600 font-medium text-lg">ID</div>
-          <div class = "text-900 text-lg">{{ user._id }}</div>
-        </div>
-        <div class = "col-12 md:col-6 p-4 border-bottom-1 surface-border">
-          <div class = "text-600 font-medium text-lg">Date of Birth</div>
-          <div class = "text-900 text-lg">{{ user.dateOfBirth | date:'mediumDate' }}</div>
-        </div>
-        <div class = "col-12 md:col-6 p-4 border-bottom-1 surface-border">
-          <div class = "text-600 font-medium text-lg">Gender</div>
-          <div class = "text-900 text-lg">{{ user.gender | titlecase }}</div>
-        </div>
-        <div class = "col-12 md:col-6 p-4 border-bottom-1 surface-border">
-          <div class = "text-600 font-medium text-lg">Last Password Change</div>
-          <div class = "text-900 text-lg">{{ user.passwordChangedAt | date:'medium' }}</div>
+            <ng-template #header>
+              <div class = "flex flex-wrap justify-between items-center w-full gap-4 p-4 border-b border-surface-border">
+                <div class = "flex gap-3">
+                  <p-button
+                    icon = "pi pi-images"
+                    [rounded] = "true"
+                    [outlined] = "true"
+                    styleClass = "p-3"
+                    (click) = "fileUpload?.choose()"
+                  />
+                  <p-button
+                    icon = "pi pi-cloud-upload"
+                    [rounded] = "true"
+                    [outlined] = "true"
+                    severity = "success"
+                    styleClass = "p-3"
+                    [disabled] = "!selectedImage || uploading"
+                    (click) = "uploadImage()"
+                  />
+                  <p-button
+                    icon = "pi pi-times"
+                    [rounded] = "true"
+                    [outlined] = "true"
+                    severity = "danger"
+                    styleClass = "p-3"
+                    [disabled] = "!selectedImage || uploading"
+                    (click) = "resetImageSelection()"
+                  />
+                </div>
+              </div>
+            </ng-template>
+            <ng-template #empty>
+              <div class = "flex items-center justify-center flex-col py-8">
+                <i class = "pi pi-cloud-upload border-2 border-surface-border rounded-full p-6 text-5xl text-color-secondary"></i>
+                <p class = "mt-6 mb-0 text-color-secondary text-xl">Drag and drop image here or click to browse</p>
+                <small class = "text-color-secondary mt-3 text-lg">JPG, PNG or GIF (Max 4MB)</small>
+              </div>
+            </ng-template>
+          </p-fileUpload>
         </div>
       </div>
+    </p-dialog>
+  </section>
 
-      <!-- Footer -->
-      <ng-template pTemplate = "footer">
-        <div class = "flex justify-center">
-          <p-button
-            label = "Change Your Image"
-            icon = "pi pi-pencil"
-            styleClass = "p-button-outlined w-full p-button-lg"
-            (onClick) = "displayImageChangeDialog = true"
-          />
-        </div>
-      </ng-template>
-    </p-card>
-  </div>
-
-  <!-- Dialog -->
-  <p-dialog
-    header = "Update Profile Picture"
-    [(visible)] = "displayImageChangeDialog"
-    [style] = "{ width: 'min(90vw, 40rem)' }"
-    [modal] = "true"
-    [draggable] = "false"
-    [resizable] = "false"
-    styleClass = "modern-upload-dialog"
-  >
-    <div class = "flex flex-col gap-6">
-      <!-- Progress Bar -->
-      <p-progressBar
-        *ngIf = "uploading"
-        [value] = "uploadProgress"
-        [showValue] = "true"
-        styleClass = "h-2"
-      ></p-progressBar>
-
-      <!-- Upload Section -->
-      <div class = "card p-0">
-        <p-fileUpload
-          name = "profileImage"
-          accept = "image/*"
-          [multiple] = "false"
-          [maxFileSize] = "4000000"
-          (onSelect) = "onImageSelect($event)"
-          (onClear) = "resetImageSelection()"
-          [customUpload] = "true"
-          chooseLabel = "Browse"
-          uploadLabel = "Upload"
-          cancelLabel = "Cancel"
-          #fileUpload
-        >
-          <ng-template #header>
-            <div class = "flex flex-wrap justify-between items-center w-full gap-4 p-4 border-b border-surface-border">
-              <div class = "flex gap-3">
-                <p-button
-                  icon = "pi pi-images"
-                  [rounded] = "true"
-                  [outlined] = "true"
-                  styleClass = "p-3"
-                  (click) = "fileUpload?.choose()"
-                />
-                <p-button
-                  icon = "pi pi-cloud-upload"
-                  [rounded] = "true"
-                  [outlined] = "true"
-                  severity = "success"
-                  styleClass = "p-3"
-                  [disabled] = "!selectedImage || uploading"
-                  (click) = "uploadImage()"
-                />
-                <p-button
-                  icon = "pi pi-times"
-                  [rounded] = "true"
-                  [outlined] = "true"
-                  severity = "danger"
-                  styleClass = "p-3"
-                  [disabled] = "!selectedImage || uploading"
-                  (click) = "resetImageSelection()"
-                />
+} @else {
+  <section class = "min-h-screen py-6">
+    <div class = "container mx-auto max-w-3xl px-4">
+      <div class = "space-y-4">
+        <!-- Placeholder for 3 posts -->
+        @for (placeholder of [ 1 ]; track $index) {
+          <div class = "shadow-md border rounded-xl overflow-hidden bg-white">
+            <!-- Post header placeholder -->
+            <div class = "post-head flex items-center p-4 border-b border-gray-100">
+              <div class = "post-user-image mr-4">
+                <div class = "w-10 h-10 rounded-full bg-gray-200 animate-pulse"></div>
+              </div>
+              <div class = "post-user-name flex-grow space-y-1.5">
+                <div class = "h-4 w-3/4 bg-gray-200 rounded animate-pulse"></div>
+                <div class = "h-3 w-1/2 bg-gray-200 rounded animate-pulse"></div>
+              </div>
+              <div class = "post-setting">
+                <div class = "w-6 h-6 bg-gray-200 rounded-full animate-pulse"></div>
               </div>
             </div>
-          </ng-template>
-          <ng-template #empty>
-            <div class = "flex items-center justify-center flex-col py-8">
-              <i class = "pi pi-cloud-upload border-2 border-surface-border rounded-full p-6 text-5xl text-color-secondary"></i>
-              <p class = "mt-6 mb-0 text-color-secondary text-xl">Drag and drop image here or click to browse</p>
-              <small class = "text-color-secondary mt-3 text-lg">JPG, PNG or GIF (Max 4MB)</small>
+
+            <!-- Post content placeholder -->
+            <div class = "post-content p-4">
+              <div class = "post-body mb-4 space-y-2">
+                <div class = "h-3 bg-gray-200 rounded animate-pulse"></div>
+                <div class = "h-3 bg-gray-200 rounded animate-pulse w-5/6"></div>
+              </div>
+
+              <!-- Post image placeholder -->
+              <div class = "post-image mb-4">
+                <div class = "w-full aspect-video bg-gray-200 rounded-md animate-pulse"></div>
+              </div>
+
             </div>
-          </ng-template>
-        </p-fileUpload>
+          </div>
+        }
       </div>
     </div>
-  </p-dialog>
-</section>
+  </section>
+  <div class = "fixed inset-0 flex items-center justify-center bg-gray-50/50">
+    <div class = "text-center">
+      <svg
+        aria-hidden = "true"
+        class = "w-24 h-24 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600 mx-auto"
+        viewBox = "0 0 100 101"
+        fill = "none"
+        xmlns = "http://www.w3.org/2000/svg"
+      >
+        <path
+          d = "M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+          fill = "currentColor"
+        />
+        <path
+          d = "M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+          fill = "currentFill"
+        />
+      </svg>
+      <p class = "mt-4 text-gray-600 text-lg">Loading User Data...</p>
+    </div>
+  </div>
+}

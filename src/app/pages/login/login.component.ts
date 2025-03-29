@@ -1,15 +1,21 @@
+import { isPlatformBrowser } from '@angular/common';
 import { Component , inject , OnDestroy , PLATFORM_ID } from '@angular/core';
+import {
+  FormBuilder ,
+  FormGroup ,
+  FormsModule ,
+  ReactiveFormsModule ,
+  Validators
+} from '@angular/forms';
+import { Router , RouterLink } from '@angular/router';
+import { MessageService } from 'primeng/api';
 import { Button } from 'primeng/button';
-import { FormBuilder , FormGroup , FormsModule , ReactiveFormsModule , Validators } from '@angular/forms';
 import { InputText } from 'primeng/inputtext';
 import { Message } from 'primeng/message';
 import { Password } from 'primeng/password';
-import { Router , RouterLink } from '@angular/router';
 import { Toast } from 'primeng/toast';
-import { MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import { UsersService } from '../../core/services/users/users.service';
-import { isPlatformBrowser } from '@angular/common';
 
 @Component ( {
   selector : 'app-login' ,
@@ -42,28 +48,42 @@ export class LoginComponent implements OnDestroy {
   /* Implement The Form Group With Form Controls */
   loginForm : FormGroup = this.formBuilder.group ( {
     email : [ null , [ Validators.required , Validators.email ] ] ,
-    password : [ null , [ Validators.required , Validators.pattern ( /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/ ) ] ]
+    password : [
+      null ,
+      [
+        Validators.required ,
+        Validators.pattern (
+          /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
+        )
+      ]
+    ]
   } );
 
   /* Submit The Register Form */
   submitForm () : void {
     if ( this.loginForm.valid ) {
-      this.userServiceSubscribe = this.userService.signIn ( this.loginForm.value ).subscribe ( {
-        next : ( res ) => {
-          console.log ( res );
-          if ( res.message === 'success' ) {
-            if ( isPlatformBrowser ( this.platformId ) ) {
-              localStorage.setItem ( 'token' , res.token );
-              this.userService.saveUserData ();
+      this.userServiceSubscribe = this.userService
+        .signIn ( this.loginForm.value )
+        .subscribe ( {
+          next : ( res ) => {
+            console.log ( res );
+            if ( res.message === 'success' ) {
+              if ( isPlatformBrowser ( this.platformId ) ) {
+                localStorage.setItem ( 'token' , res.token );
+                this.userService.saveUserData ();
+              }
+              this.messageService.add ( {
+                severity : 'success' ,
+                summary : 'Success' ,
+                detail : 'Register Was Successfully' ,
+                life : 5000
+              } );
+              setTimeout ( () => {
+                this.router.navigate ( [ '/timeline' ] );
+              } , 2000 );
             }
-            this.messageService.add ( { severity : 'success' , summary : 'Success' , detail : 'Register Was Successfully' , life : 5000 } );
-            setTimeout ( () => {
-              this.router.navigate ( [ '/timeline' ] );
-            } , 2000 );
           }
-
-        }
-      } );
+        } );
     } else {
       this.loginForm.markAllAsTouched ();
     }
@@ -73,5 +93,4 @@ export class LoginComponent implements OnDestroy {
     this.userServiceSubscribe.unsubscribe ();
     console.log ( 'userService UnSubscribe Done' );
   }
-
 }

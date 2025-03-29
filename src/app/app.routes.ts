@@ -24,6 +24,9 @@ export const routes : Routes = [
           path : 'timeline' , loadComponent : ( () => import('./pages/timeline/timeline.component').then ( ( c ) => c.TimelineComponent ) ) , title : 'TimeLine'
         } ,
         {
+          path : 'userposts' , loadComponent : ( () => import('./pages/userposts/userposts.component').then ( ( c ) => c.UserpostsComponent ) ) , title : 'MyPosts'
+        } ,
+        {
           path : 'changepassword' , loadComponent : ( () => import ('./pages/changepassword/changepassword.component').then ( ( c ) => c.ForgetpasswordComponent ) ) , title : 'ChangePassword'
         } ,
         {

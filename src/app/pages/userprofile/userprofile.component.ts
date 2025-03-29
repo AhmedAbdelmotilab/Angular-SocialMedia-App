@@ -23,7 +23,7 @@ import { Subscription } from 'rxjs';
     DialogModule ,
     FileUploadModule ,
     ProgressBarModule ,
-    Image
+    Image ,
   ] ,
   templateUrl : './userprofile.component.html' ,
   styleUrl : './userprofile.component.scss'
@@ -143,6 +143,7 @@ export class UserprofileComponent implements OnInit , OnDestroy {
       this.fileUpload.clear ();
     }
   }
+
   // Utility methods for toast messages
   private showSuccessMessage ( summary : string , detail : string ) : void {
     this.messageService.add ( {
@@ -152,6 +153,7 @@ export class UserprofileComponent implements OnInit , OnDestroy {
       life : 3000
     } );
   }
+
   private showErrorMessage ( summary : string , detail : string ) : void {
     this.messageService.add ( {
       severity : 'error' ,
@@ -160,6 +162,7 @@ export class UserprofileComponent implements OnInit , OnDestroy {
       life : 5000
     } );
   }
+
   private showWarningMessage ( summary : string , detail : string ) : void {
     this.messageService.add ( {
       severity : 'warn' ,

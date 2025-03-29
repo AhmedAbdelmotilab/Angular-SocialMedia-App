@@ -1,0 +1,23 @@
+/* Add smooth transitions for modal */
+.modal-transition {
+  transition : opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Custom scrollbar for modal */
+::-webkit-scrollbar {
+  width : 8px;
+}
+
+::-webkit-scrollbar-track {
+  background    : #f1f1f1;
+  border-radius : 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background    : #888;
+  border-radius : 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background : #555;
+}
