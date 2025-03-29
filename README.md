@@ -1,6 +1,3 @@
-Here's an expanded **README.md** with sections for screenshots and detailed setup instructions:  
-
-```markdown
 # Social Media App (Angular)  
 
 A full-featured social media platform with authentication, post interactions, and user profiles. Built with **Angular**, **PrimeNG**, **Tailwind CSS**, and **Flowbite**.  
@@ -109,4 +106,3 @@ This version:
 ✅ Uses emojis/icons for better readability.  
 ✅ Leaves room for backend notes.  
 
-Need any adjustments? 😊
